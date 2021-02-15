@@ -20,14 +20,15 @@ $(document).ready(function () {
   );
   $('button').click(function () {
     console.log(Object.keys(dictResults));
-    $.ajax({
-      type: 'POST',
-      url: 'http://localhost:5001/api/v1/places_search/',
-      data: JSON.stringify(Object.keys(dictResults)),
-      contentType: 'application/json',
-      success: function (response) {
-        for (const place of response) {
-          $(`<article>
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:5001/api/v1/places_search/',
+        data: JSON.stringify({amenities: Object.values(dictResults)}),
+        contentType: 'application/json',
+        success: function (response) {
+          $('section.places').empty();
+          for (const place of response) {
+            $(`<article>
             <div class="title_box">
             <h2>${place.name}</h2>
             <div class="price_by_night">${place.price_by_night}</div>
@@ -39,8 +40,8 @@ $(document).ready(function () {
             </div>
             <div class="description">${place.description}</div>
             </article>`).appendTo('section.places');
+          }
         }
-      }
-    });
+      });
   });
 });
